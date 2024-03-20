@@ -14,14 +14,7 @@ public class Reservation {
 	private static DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy"); 
 	
 	public Reservation(Integer roomNumber, LocalDate checkIn, LocalDate checkOut) {
-		if(checkIn.isBefore(LocalDate.now()) || checkOut.isBefore(LocalDate.now())) {
-			 throw new DomainException("Reservation dates must be future dates");
-		}
-		
-		if(checkOut.isBefore(checkIn)) {
-			throw new DomainException("Check-out date must be after check-in date");
-		}
-		
+		validateDates(checkIn, checkOut);		
 		
 		this.roomNumber = roomNumber;
 		this.checkIn = checkIn;
@@ -49,16 +42,20 @@ public class Reservation {
 	}
 	
 	public void updateDates(LocalDate checkIn, LocalDate checkOut) {
+		validateDates(checkIn, checkOut);
+		
+		this.checkIn = checkIn;
+		this.checkOut = checkOut;
+	}
+	
+	private void validateDates(LocalDate checkIn, LocalDate checkOut) {
 		if(checkIn.isBefore(LocalDate.now()) || checkOut.isBefore(LocalDate.now())) {
 			 throw new DomainException("Reservation dates must be future dates");
 		}
 		
 		if(checkOut.isBefore(checkIn)) {
 			throw new DomainException("Check-out date must be after check-in date");
-		}
-		
-		this.checkIn = checkIn;
-		this.checkOut = checkOut;
+		}		
 	}
 	
 	@Override
