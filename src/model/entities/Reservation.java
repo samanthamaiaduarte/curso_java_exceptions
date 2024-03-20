@@ -37,9 +37,18 @@ public class Reservation {
 		return Duration.between(checkIn.atStartOfDay(), checkOut.atStartOfDay()).toDays();
 	}
 	
-	public void updateDates(LocalDate checkIn, LocalDate checkOut) {
+	public String updateDates(LocalDate checkIn, LocalDate checkOut) {
+		if(checkIn.isBefore(LocalDate.now()) || checkOut.isBefore(LocalDate.now())) {
+			return "Reservation dates must be future dates";
+		}
+		
+		if(checkOut.isBefore(checkIn)) {
+			return "Check-out date must be after check-in date";
+		}
+		
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
+		return null;
 	}
 	
 	@Override
